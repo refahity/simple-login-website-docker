@@ -11,27 +11,35 @@ RUN apt-get update && apt-get install -y \
     python3-pip \
     python3-venv \
     && rm -rf /var/lib/apt/lists/*
-    
+
 # Set environment variables 
 # APP_ENV: tells the app in which environment it's running (dev/prod)
-ENV APP_ENV=production 
+RUN python3 -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
 
 # Copy the requirements file into the container
 COPY requirements.txt .
 
-# Install Python dependencies and create a non-root user
-RUN pip3 install --no-cache-dir -r requirements.txt \
-    && adduser --disabled-password --gecos "" appuser
+# Install Python dependencies
+RUN pip install --upgrade pip setuptools wheel \
+    && pip install --no-cache-dir -r requirements.txt
+
+#  create a non-root user
+RUN adduser --disabled-password --gecos "" appuser
 
 # Copy the application code into the container
 COPY app.py .
+
+# Set environment variables for security used in programe code
+ENV SECRET_KEY="change-me-in-prod" \
+    DEMO_SECRET="changeme" \
+    APP_PORT=5000
 
 # Switch to the non-root user for security
 USER appuser
 
 # Expose the application port
-EXPOSE 5001
+EXPOSE ${APP_PORT}
 
 # Define the command to run the application
 CMD ["python3", "app.py"]
-
