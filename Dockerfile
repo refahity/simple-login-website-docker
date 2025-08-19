@@ -31,9 +31,7 @@ RUN useradd -m appuser
 COPY app.py .
 
 # Set environment variables for security used in programe code
-ENV SECRET_KEY="change-me-in-prod" \
-    DEMO_SECRET="changeme" \
-    APP_PORT=5000
+ENV  APP_PORT=5000
 
 # Switch to the non-root user for security
 USER appuser
@@ -43,4 +41,5 @@ EXPOSE ${APP_PORT}
 
 # Define the command to run the application
 CMD ["python3", "app.py"]
+
 
