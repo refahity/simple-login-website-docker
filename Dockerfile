@@ -11,6 +11,10 @@ RUN apt-get update && apt-get install -y \
     python3-pip \
     python3-venv \
     && rm -rf /var/lib/apt/lists/*
+    
+# Set environment variables 
+# APP_ENV: tells the app in which environment it's running (dev/prod)
+ENV APP_ENV=production 
 
 # Copy the requirements file into the container
 COPY requirements.txt .
@@ -30,3 +34,4 @@ EXPOSE 5001
 
 # Define the command to run the application
 CMD ["python3", "app.py"]
+
