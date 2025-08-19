@@ -25,7 +25,7 @@ RUN pip install --upgrade pip setuptools wheel \
     && pip install --no-cache-dir -r requirements.txt
 
 #  create a non-root user
-RUN adduser --disabled-password --gecos "" appuser
+RUN useradd -m appuser
 
 # Copy the application code into the container
 COPY app.py .
@@ -43,3 +43,4 @@ EXPOSE ${APP_PORT}
 
 # Define the command to run the application
 CMD ["python3", "app.py"]
+
